@@ -1,0 +1,11 @@
+<mapper namespace="com.example.RM_solution">
+    <resultMap id="userResultMap" type="User">
+        <id property="id" column="id"/>
+        <result property="user_id" column="user_id"/>
+        <result property="secret" column="secret"/>
+        <Insert  id="save" parameterType="User">
+            INSERT INTO `user`(user_id, secret)
+            VALUES(#{user_id}, #{secret})
+        </Insert>
+    </resultMap>
+</mapper>
