@@ -4,6 +4,8 @@ import com.example.RM_solution.auth.entity.User;
 import com.example.RM_solution.auth.util.HashUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,31 +13,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     @Autowired
     private HashUtil hash;
-
-    private final SqlSession sqlSession;
-
-    public AuthService(SqlSession sqlSession) {
-        this.sqlSession = sqlSession;
-    }
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional
-    public void createIdentity(SignUpRequest req){
+    public boolean createIdentity(SignUpRequest req){
         try{
             User toSaveUser = User.builder()
                     .user_id(req.getUser_id())
-                    .secret(req.getSecret()).build();
-
-            int rowResult = sqlSession.insert("com.example.RM_solution.save", toSaveUser);
-
-            if (rowResult > 0) {
-                System.out.println("데이터베이스에 삽입이 완료되었습니다.");
-            } else {
-                System.out.println("데이터 삽입에 실패하였습니다.");
+                    .secret(hash.createHash(req.getPassword())).build();
+            if(findUser(req.getUser_id()) != null){
+                System.out.println("동일한 아이디 존재");
+                return false;
             }
+            userMapper.insert(toSaveUser);
+
         }catch (Exception e){
             e.printStackTrace();
-
         }
+        return true;
 
+    }
+
+    public User findUser(String user_id){
+        return userMapper.findByUser_id(user_id);
     }
 }

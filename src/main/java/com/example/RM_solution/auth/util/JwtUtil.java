@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.RM_solution.auth.AuthUser;
 
 import java.util.Date;
 
@@ -16,7 +17,7 @@ public class JwtUtil {
     public final long TOKEN_TIMEOUT = 1000 * 60 * 60 * 24 * 7;
 
     //JWT토큰 생성
-    public String createToken(Long id, String userid, String nickname){
+    public String createToken(Long id, String user_id){
         Date now = new Date();
 
         Date expire = new Date(now.getTime()+TOKEN_TIMEOUT);
@@ -25,32 +26,30 @@ public class JwtUtil {
 
         return JWT.create()
                 .withSubject(id.toString())
-                .withClaim("userid", userid)
-                .withClaim("nickname", nickname)
+                .withClaim("user_id", user_id)
                 .withIssuedAt(now)
                 .withExpiresAt(expire)
                 .sign(algorithm);
     }
 
-//    public AuthUser validateToken(String token){
-//        System.out.println(token);
-//        //검증 객체
-//        Algorithm algorithm = Algorithm.HMAC256(secret);
-//        JWTVerifier verifier = JWT.require(algorithm).build();
-//
-//        try{
-//            DecodedJWT decodedJWT = verifier.verify(token);
-//            long id = Long.valueOf(decodedJWT.getSubject());
-//            String userid = decodedJWT.getClaim("userid").asString();
-//            String nickname = decodedJWT.getClaim("nickname").asString();
-//
-//            return AuthUser.builder().id(id).userid(userid).nickname(nickname).build();
-//
-//        }catch (JWTVerificationException e){
-//            //토큰 검증 오류 상황
-//            return null;
-//        }
-//    }
+    public AuthUser validateToken(String token){
+        System.out.println(token);
+        //검증 객체
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+
+        try{
+            DecodedJWT decodedJWT = verifier.verify(token);
+            long id = Long.valueOf(decodedJWT.getSubject());
+            String user_id = decodedJWT.getClaim("user_id").asString();
+
+            return AuthUser.builder().id(id).user_id(user_id).build();
+
+        }catch (JWTVerificationException e){
+            //토큰 검증 오류 상황
+            return null;
+        }
+    }
 
     public String expireToken(String token){
         Date expire = new Date(System.currentTimeMillis());
