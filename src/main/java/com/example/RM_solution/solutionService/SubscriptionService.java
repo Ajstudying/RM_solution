@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service
 public class SubscriptionService {
 
@@ -28,12 +31,16 @@ public class SubscriptionService {
                         .companyMail(req.getCompanyMail()).build();
                 companyId = subscriptionMapper.companyInsert(newCompany);
             }
+
+            //구독 만료일
+            long newExpirationDate = new Date().getTime() + (req.getSubscriptionPeriod() * 24 * 60 * 60 * 1000);
+
             // 구독 정보 생성
             Subscription newSubscription = Subscription.builder()
                     .userCount(req.getUserCount())
                     .serviceType(req.getServiceType())
                     .storageCapacityTB(req.getStorageCapacityTB())
-                    .subscriptionPeriod(req.getSubscriptionPeriod())
+                    .subscriptionExpirationDate(new Date(newExpirationDate))
                     .subscriptionCost(20000)
                     .user_id(userId)
                     .company_id(companyId).build();

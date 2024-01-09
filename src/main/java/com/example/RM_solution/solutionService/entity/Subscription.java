@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +19,8 @@ public class Subscription {
     private String serviceType;
     //스토리지 용량
     private String storageCapacityTB;
-    //구독기간
-    private String subscriptionPeriod;
+    //구독만료기간
+    private Date subscriptionExpirationDate;
     //구독비용
     private int subscriptionCost;
     //사용자 id

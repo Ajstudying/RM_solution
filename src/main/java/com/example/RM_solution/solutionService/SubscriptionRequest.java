@@ -19,5 +19,5 @@ public class SubscriptionRequest {
     //스토리지 용량
     private String storageCapacityTB;
     //구독기간
-    private String subscriptionPeriod;
+    private int subscriptionPeriod;
 }
