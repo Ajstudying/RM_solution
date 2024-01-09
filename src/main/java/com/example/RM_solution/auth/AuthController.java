@@ -27,7 +27,7 @@ public class AuthController {
     public ResponseEntity signUp(@RequestBody SignUpRequest req){
         System.out.println(req);
 
-        if(req.getUser_id() == null || req.getUser_id().isEmpty()){
+        if(req.getUsername() == null || req.getUsername().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         if(req.getPassword() == null || req.getPassword().isEmpty()){
@@ -44,12 +44,12 @@ public class AuthController {
 
     @PostMapping(value = "signin")
     public ResponseEntity signin(
-            @RequestParam String user_id,
+            @RequestParam String username,
             @RequestParam String password,
             HttpServletResponse res){
-        System.out.println(user_id);
+        System.out.println(username);
 
-        User findedUser = service.findUser(user_id);
+        User findedUser = service.findUser(username);
         if(findedUser == null){
             System.out.println("유저가 없음");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -61,7 +61,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        String token = jwt.createToken(findedUser.getId(), findedUser.getUser_id());
+        String token = jwt.createToken(findedUser.getId(), findedUser.getUsername());
         System.out.println(token);
 
         Cookie cookie = new Cookie("token", token);

@@ -17,7 +17,7 @@ public class JwtUtil {
     public final long TOKEN_TIMEOUT = 1000 * 60 * 60 * 24 * 7;
 
     //JWT토큰 생성
-    public String createToken(Long id, String user_id){
+    public String createToken(Long id, String username){
         Date now = new Date();
 
         Date expire = new Date(now.getTime()+TOKEN_TIMEOUT);
@@ -26,7 +26,7 @@ public class JwtUtil {
 
         return JWT.create()
                 .withSubject(id.toString())
-                .withClaim("user_id", user_id)
+                .withClaim("username", username)
                 .withIssuedAt(now)
                 .withExpiresAt(expire)
                 .sign(algorithm);
@@ -41,9 +41,9 @@ public class JwtUtil {
         try{
             DecodedJWT decodedJWT = verifier.verify(token);
             long id = Long.valueOf(decodedJWT.getSubject());
-            String user_id = decodedJWT.getClaim("user_id").asString();
+            String username = decodedJWT.getClaim("username").asString();
 
-            return AuthUser.builder().id(id).user_id(user_id).build();
+            return AuthUser.builder().id(id).username(username).build();
 
         }catch (JWTVerificationException e){
             //토큰 검증 오류 상황

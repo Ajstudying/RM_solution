@@ -1,4 +1,4 @@
-package com.example.RM_solution.company;
+package com.example.RM_solution.solutionService.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

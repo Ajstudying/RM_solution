@@ -1,16 +1,17 @@
-package com.example.RM_solution.subscription;
+package com.example.RM_solution.solutionService;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Subscription {
-    private long id;
+public class SolutionServiceRequest {
+    //회사명
+    private String companyName;
+    //회사전화번호
+    private String companyTelephone;
+    //이메일
+    private String companyMail;
     //사용인원
     private int userCount;
     //서비스 형태(Basic, Standard, Premium)

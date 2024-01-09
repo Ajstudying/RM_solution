@@ -20,9 +20,9 @@ public class AuthService {
     public boolean createIdentity(SignUpRequest req){
         try{
             User toSaveUser = User.builder()
-                    .user_id(req.getUser_id())
+                    .username(req.getUsername())
                     .secret(hash.createHash(req.getPassword())).build();
-            if(findUser(req.getUser_id()) != null){
+            if(findUser(req.getUsername()) != null){
                 System.out.println("동일한 아이디 존재");
                 return false;
             }
@@ -35,7 +35,7 @@ public class AuthService {
 
     }
 
-    public User findUser(String user_id){
-        return userMapper.findByUser_id(user_id);
+    public User findUser(String username){
+        return userMapper.findByUsername(username);
     }
 }

@@ -1,0 +1,10 @@
+package com.example.RM_solution.solutionService;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(value = "/subscription")
+public class SubscriptionController {
+
+}

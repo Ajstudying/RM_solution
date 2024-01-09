@@ -11,9 +11,9 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Select("SELECT * FROM user WHERE user_id = #{user_id}")
-    User findByUser_id(String user_id);
-    @Insert("INSERT INTO user (user_id, secret) VALUES (#{user_id}, #{secret})")
+    @Select("SELECT * FROM user WHERE username = #{username}")
+    User findByUsername(String username);
+    @Insert("INSERT INTO user (username, secret) VALUES (#{username}, #{secret})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
 
