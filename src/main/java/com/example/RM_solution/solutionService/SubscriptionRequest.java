@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SolutionServiceRequest {
+public class SubscriptionRequest {
     //회사명
     private String companyName;
     //회사전화번호

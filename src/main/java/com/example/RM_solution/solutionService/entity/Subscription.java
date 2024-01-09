@@ -20,7 +20,7 @@ public class Subscription {
     //구독기간
     private String subscriptionPeriod;
     //구독비용
-    private int subscriptionCost = 20000;
+    private int subscriptionCost;
     //사용자 id
     private long user_id;
     //회사정보
