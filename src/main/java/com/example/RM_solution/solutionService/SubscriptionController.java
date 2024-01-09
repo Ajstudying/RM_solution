@@ -26,7 +26,7 @@ public class SubscriptionController {
 
         System.out.println(subs);
         //데이터 무결성 확인
-        if(subs.getUserCount() == 0){
+        if(subs.getUserCount() == null){
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -38,7 +38,7 @@ public class SubscriptionController {
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        if(subs.getSubscriptionPeriod() == null || subs.getSubscriptionPeriod().isEmpty()){
+        if(subs.getSubscriptionPeriod() == null){
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
