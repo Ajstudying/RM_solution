@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
@@ -32,15 +35,22 @@ public class SubscriptionService {
                 companyId = subscriptionMapper.companyInsert(newCompany);
             }
 
-            //구독 만료일
-            long newExpirationDate = new Date().getTime() + (req.getSubscriptionPeriod() * 24 * 60 * 60 * 1000);
+            //구독 만료일 설정
+            int subscriptionPeriodInDays = req.getSubscriptionPeriod();
+
+            // 현재 날짜에 일 수를 더하여 새로운 날짜를 얻기
+            LocalDate currentDate = LocalDate.now();
+            LocalDate newExpirationDate = currentDate.plus(subscriptionPeriodInDays, ChronoUnit.DAYS);
+
+            // LocalDate를 Date로 변환
+            Date date = Date.from(newExpirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             // 구독 정보 생성
             Subscription newSubscription = Subscription.builder()
                     .userCount(req.getUserCount())
                     .serviceType(req.getServiceType())
                     .storageCapacityTB(req.getStorageCapacityTB())
-                    .subscriptionExpirationDate(new Date(newExpirationDate))
+                    .subscriptionExpirationDate(date)
                     .subscriptionCost(20000)
                     .user_id(userId)
                     .company_id(companyId).build();
