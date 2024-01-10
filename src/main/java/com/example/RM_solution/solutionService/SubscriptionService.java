@@ -32,9 +32,9 @@ public class SubscriptionService {
                         .companyName(req.getCompanyName())
                         .companyTelephone(req.getCompanyTelephone())
                         .companyMail(req.getCompanyMail()).build();
-                companyId = subscriptionMapper.companyInsert(newCompany);
+                subscriptionMapper.companyInsert(newCompany);
+                companyId = newCompany.getId();
             }
-
             //구독 만료일 설정
             int subscriptionPeriodInDays = req.getSubscriptionPeriod();
 

@@ -68,6 +68,14 @@ public class SubscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-    
+
+    @Auth
+    @GetMapping
+    public ResponseEntity getSubscriptions(@RequestAttribute AuthUser authUser){
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }
