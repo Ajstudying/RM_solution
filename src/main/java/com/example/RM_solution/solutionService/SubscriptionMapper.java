@@ -2,10 +2,13 @@ package com.example.RM_solution.solutionService;
 
 import com.example.RM_solution.solutionService.entity.Company;
 import com.example.RM_solution.solutionService.entity.Subscription;
+import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface SubscriptionMapper {
@@ -27,6 +30,12 @@ public interface SubscriptionMapper {
             "VALUES (#{userCount}, #{serviceType}, #{storageCapacityTB}, #{subscriptionExpirationDate}, #{subscriptionCost}, #{user_id}, #{company_id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Subscription subscription);
+
+    //회사정보 + 구독정보 조회
+    @Select("SELECT *FROM subscription " +
+            "inner join company on subscription.company_id = company.id " +
+            "WHERE user_id = #{user_id}")
+    List<SubscriptionResponse> findSubscriptionResponseByUser_id(long user_id);
 
 
 }

@@ -4,10 +4,13 @@ import com.example.RM_solution.auth.Auth;
 import com.example.RM_solution.auth.AuthUser;
 import com.example.RM_solution.auth.UserMapper;
 import com.example.RM_solution.solutionService.entity.Subscription;
+import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/subscription")
@@ -71,11 +74,10 @@ public class SubscriptionController {
 
     @Auth
     @GetMapping
-    public ResponseEntity getSubscriptions(@RequestAttribute AuthUser authUser){
+    public ResponseEntity<List<SubscriptionResponse>> getSubscriptions(@RequestAttribute AuthUser authUser){
+        List<SubscriptionResponse> res = service.getSubscriptionData(authUser.getId());
 
-
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(res);
     }
 
 }

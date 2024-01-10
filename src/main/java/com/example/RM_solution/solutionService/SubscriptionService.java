@@ -2,7 +2,10 @@ package com.example.RM_solution.solutionService;
 
 import com.example.RM_solution.solutionService.entity.Company;
 import com.example.RM_solution.solutionService.entity.Subscription;
+import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SubscriptionService {
@@ -63,5 +67,15 @@ public class SubscriptionService {
             return false;
         }
         return true;
+    }
+
+    public List<SubscriptionResponse> getSubscriptionData(long user_id) {
+        try {
+            List<SubscriptionResponse> res = subscriptionMapper.findSubscriptionResponseByUser_id(user_id);
+            return (res != null) ? res : List.of();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An error occurred while processing the subscription data.", e);
+        }
     }
 }
