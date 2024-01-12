@@ -17,7 +17,7 @@ public class SubscriptionRequest {
     //서비스 형태(Basic, Standard, Premium)
     private String serviceType;
     //스토리지 용량
-    private String storageCapacityTB;
+    private String storageCapacity;
     //구독기간
     private Integer subscriptionPeriod;
 }

@@ -53,7 +53,7 @@ public class SubscriptionService {
             Subscription newSubscription = Subscription.builder()
                     .userCount(req.getUserCount())
                     .serviceType(req.getServiceType())
-                    .storageCapacityTB(req.getStorageCapacityTB())
+                    .storageCapacity(req.getStorageCapacity())
                     .subscriptionExpirationDate(date)
                     .subscriptionCost(20000)
                     .user_id(userId)

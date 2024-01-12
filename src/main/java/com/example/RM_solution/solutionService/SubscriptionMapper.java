@@ -27,7 +27,7 @@ public interface SubscriptionMapper {
     //구독 정보 추가
     @Insert("INSERT INTO subscription " +
             "(user_count, service_type, storage_capacity, subscription_expiration_date, subscription_cost, user_id, company_id ) " +
-            "VALUES (#{userCount}, #{serviceType}, #{storageCapacityTB}, #{subscriptionExpirationDate}, #{subscriptionCost}, #{user_id}, #{company_id})")
+            "VALUES (#{userCount}, #{serviceType}, #{storageCapacity}, #{subscriptionExpirationDate}, #{subscriptionCost}, #{user_id}, #{company_id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Subscription subscription);
 
