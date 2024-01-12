@@ -3,14 +3,18 @@ package com.example.RM_solution.solutionService;
 import com.example.RM_solution.auth.Auth;
 import com.example.RM_solution.auth.AuthUser;
 import com.example.RM_solution.auth.UserMapper;
-import com.example.RM_solution.solutionService.entity.Subscription;
+import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
+import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/subscription")
@@ -76,8 +80,32 @@ public class SubscriptionController {
     @GetMapping
     public ResponseEntity<List<SubscriptionResponse>> getSubscriptions(@RequestAttribute AuthUser authUser){
         List<SubscriptionResponse> res = service.getSubscriptionData(authUser.getId());
-
+        //자바에서 Date 타입을 Json으로 내보낼 때는 unix stamp 타입으로 변경돼서 나가게 됨.
+        for (int i = 0; i < res.size(); i++) {
+            Date date = res.get(i).getSubscriptionExpirationDate();
+            System.out.println(date);
+        }
         return ResponseEntity.ok(res);
+    }
+
+    @Auth
+    @PutMapping
+    public ResponseEntity<SubscriptionResponse> editSubscription(
+            @RequestBody ModifySubscriptionRequest modifySubs,
+            @RequestAttribute AuthUser authUser){
+
+        System.out.println(modifySubs);
+
+        Map<String, Object> result = service.modifySubscriptionData(authUser.getId(), modifySubs);
+
+        //데이터가 null이 아니고 success가 true일때
+        if((boolean) result.get("success") && result != null){
+            SubscriptionResponse modifiedSubs = (SubscriptionResponse) result.get("data");
+
+            return ResponseEntity.status(HttpStatus.OK).body(modifiedSubs);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }

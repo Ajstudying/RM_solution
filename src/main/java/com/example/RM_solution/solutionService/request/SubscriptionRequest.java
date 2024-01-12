@@ -1,4 +1,4 @@
-package com.example.RM_solution.solutionService;
+package com.example.RM_solution.solutionService.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

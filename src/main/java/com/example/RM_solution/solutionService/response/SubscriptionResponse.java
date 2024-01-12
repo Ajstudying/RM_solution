@@ -8,6 +8,9 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class SubscriptionResponse {
+
+    //구독 id
+    private long id;
     //사용인원
     private int userCount;
     //서비스 형태(Basic, Standard, Premium)

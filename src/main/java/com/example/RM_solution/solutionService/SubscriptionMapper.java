@@ -1,28 +1,14 @@
 package com.example.RM_solution.solutionService;
 
-import com.example.RM_solution.solutionService.entity.Company;
-import com.example.RM_solution.solutionService.entity.Subscription;
+import com.example.RM_solution.companyService.Company;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
 public interface SubscriptionMapper {
-    @Select("SELECT * FROM subscription WHERE user_id = #{id}")
-    Subscription findByUser_id(Long id);
-
-    //회사 정보 추가
-    @Insert("INSERT INTO company (company_name, company_telephone, company_mail) " +
-            "VALUES (#{companyName}, #{companyTelephone}, #{companyMail})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    long companyInsert(Company company);
-
-    @Select("SELECT * FROM company WHERE company_name = #{companyName}")
-    Long findByCompanyName(String CompanyName);
 
     //구독 정보 추가
     @Insert("INSERT INTO subscription " +
@@ -32,10 +18,26 @@ public interface SubscriptionMapper {
     void insert(Subscription subscription);
 
     //회사정보 + 구독정보 조회
-    @Select("SELECT *FROM subscription " +
+    @Select("SELECT * FROM subscription " +
             "inner join company on subscription.company_id = company.id " +
             "WHERE user_id = #{user_id}")
     List<SubscriptionResponse> findSubscriptionResponseByUser_id(long user_id);
+
+    //해당 유저의 구독 정보가 있는지 조회
+    @Select("SELECT * FROM subscription WHERE user_id = #{user_id} AND id = #{subscriptionId}")
+    Subscription findByUser_idAndSubscriptionId(@Param("user_id") long user_id, @Param("subscriptionId") long subscriptionId);
+
+    @Update("UPDATE subscription set " +
+            "subscription_expiration_date = #{subscriptionPeriod} where subscription.id = #{id}")
+    void update(@Param("subscriptionPeriod") Date subscriptionPeriod, @Param("id")long id);
+
+
+    @Select("SELECT * FROM subscription " +
+            "inner join company on subscription.company_id = company.id WHERE subscription.id = #{id}")
+    SubscriptionResponse findBySubscriptionId(long id);
+
+
+
 
 
 }
