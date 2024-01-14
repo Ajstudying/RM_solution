@@ -13,8 +13,6 @@ import java.util.Date;
 @Builder
 public class Subscription {
     private long id;
-    //사용인원
-    private int userCount;
     //서비스 형태(Basic, Standard, Premium)
     private String serviceType;
     //스토리지 용량

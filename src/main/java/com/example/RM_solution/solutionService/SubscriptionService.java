@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
@@ -43,6 +44,7 @@ public class SubscriptionService {
                 companyMapper.companyInsert(newCompany);
                 companyId = newCompany.getId();
             }
+
             //구독 만료일 설정
             int subscriptionPeriodInDays = req.getSubscriptionPeriod();
 
@@ -53,9 +55,14 @@ public class SubscriptionService {
             // LocalDate를 Date로 변환
             Date date = Date.from(newExpirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+//            //회사 정보로 구독 정보가 있는지 확인
+//            Long isSubscription = subscriptionMapper.findByCompanyId(companyId);
+//
+//            if(isSubscription != null){
+//                return false;
+//            }
             // 구독 정보 생성
             Subscription newSubscription = Subscription.builder()
-                    .userCount(req.getUserCount())
                     .serviceType(req.getServiceType())
                     .storageCapacity(req.getStorageCapacity())
                     .subscriptionExpirationDate(date)
@@ -73,10 +80,40 @@ public class SubscriptionService {
         return true;
     }
 
+    @Transactional
     public List<SubscriptionResponse> getSubscriptionData(long user_id) {
         try {
+            //해당 유저의 구독 정보만 추출
             List<SubscriptionResponse> res = subscriptionMapper.findSubscriptionResponseByUser_id(user_id);
-            return (res != null) ? res : List.of();
+            System.out.println(res);
+
+            //구독 정보가 없을 때 빈 리스트 내보내기
+            if(res.isEmpty()){
+                return List.of();
+            }
+            // 모든 구독 정보의 CompanyID를 추출
+            List<Long> companyIds = res.stream()
+                    .map(SubscriptionResponse::getCompanyId)
+                    .collect(Collectors.toList());
+
+            System.out.println(companyIds + "id 들");
+            // 한 번의 쿼리(동적 sql로 서버에서 db간의 통신을 최소화) 모든 구독 정보와 사용자 수를 가져오기
+            List<Map<String, Long>> userCounts = subscriptionMapper.findUserCountsByCompanyIds(companyIds);
+
+            System.out.println(userCounts);
+
+            // 구독 정보에 사용자 수 설정
+            res.forEach(subscriptionResponse -> {
+                int index = res.indexOf(subscriptionResponse);
+                long companyId = userCounts.get(index).get("companyId");
+
+                if (subscriptionResponse.getCompanyId() == companyId) {
+                    long userCount = userCounts.get(index).get("userCount");
+                    subscriptionResponse.setUserCount(userCount);
+                }
+            });
+
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("An error occurred while processing the subscription data.", e);
@@ -107,7 +144,7 @@ public class SubscriptionService {
             subscriptionMapper.update(date, foundSubs.getId());
 
             //수정된 결과 조회
-            SubscriptionResponse updatedSubs = subscriptionMapper.findBySubscriptionId(foundSubs.getId());
+            SubscriptionResponse updatedSubs = subscriptionMapper.findSubscriptionResponseById(foundSubs.getId());
 
             // 결과를 Map에 저장
             result.put("success", true);
