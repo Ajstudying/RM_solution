@@ -11,9 +11,9 @@ import java.util.Map;
 @Mapper
 public interface SubscriptionMapper {
 
-    //회사 정보로 구독정보 조회
-    @Select("SELECT * FROM subscription WHERE company_id = #{id}")
-    Long findByCompanyId(long id);
+    //구독정보 조회
+    @Select("SELECT * FROM subscription")
+    List<SubscriptionResponse> findAll();
 
     //구독 정보 추가
     @Insert("INSERT INTO subscription " +
@@ -35,6 +35,7 @@ public interface SubscriptionMapper {
     @Update("UPDATE subscription set " +
             "subscription_expiration_date = #{subscriptionPeriod} where subscription.id = #{id}")
     void update(@Param("subscriptionPeriod") Date subscriptionPeriod, @Param("id")long id);
+
     //해당 유저의 구독정보 모두 조회
     @Select("SELECT * FROM subscription " +
             "INNER JOIN company on subscription.company_id = company.id WHERE subscription.id = #{id}")

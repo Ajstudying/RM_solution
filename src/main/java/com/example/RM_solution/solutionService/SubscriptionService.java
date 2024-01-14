@@ -27,6 +27,21 @@ public class SubscriptionService {
     @Autowired
     CompanyMapper companyMapper;
 
+    //전체 조회
+    public List<SubscriptionResponse> getSubscriptionData(){
+        try{
+            List<SubscriptionResponse> allList = subscriptionMapper.findAll();
+            if(allList.isEmpty()){
+                return List.of();
+            }
+            return allList;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //구독 정보 생성
     @Transactional
     public boolean createSubscription(SubscriptionRequest req, long userId){
 
@@ -80,8 +95,9 @@ public class SubscriptionService {
         return true;
     }
 
+    //유저의 구독 정보 데이터 조회
     @Transactional
-    public List<SubscriptionResponse> getSubscriptionData(long user_id) {
+    public List<SubscriptionResponse> getUsersSubscriptionData(long user_id) {
         try {
             //해당 유저의 구독 정보만 추출
             List<SubscriptionResponse> res = subscriptionMapper.findSubscriptionResponseByUser_id(user_id);
@@ -120,6 +136,7 @@ public class SubscriptionService {
         }
     }
 
+    //유저의 구독 정보 수정 업데이트
     @Transactional
     public Map<String, Object> modifySubscriptionData
             (long user_id, ModifySubscriptionRequest modifySubs){

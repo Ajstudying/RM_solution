@@ -26,6 +26,17 @@ public class SubscriptionController {
     @Autowired
     UserMapper userMapper;
 
+    //전체 구독 정보 조회
+    @GetMapping
+    public ResponseEntity<List<SubscriptionResponse>> getSubscription(){
+        List<SubscriptionResponse> result = service.getSubscriptionData();
+        if(result != null){
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    //인증된 사용자의 구독 정보 추가
     @Auth
     @PostMapping
     public ResponseEntity addSubscription
@@ -72,18 +83,21 @@ public class SubscriptionController {
         }
     }
 
+    // 인증된 사용자의 구독 정보를 조회
     @Auth
-    @GetMapping
-    public ResponseEntity<List<SubscriptionResponse>> getSubscriptions(@RequestAttribute AuthUser authUser){
-        List<SubscriptionResponse> res = service.getSubscriptionData(authUser.getId());
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<List<SubscriptionResponse>> getUsersSubscriptions(@RequestAttribute AuthUser authUser){
+        List<SubscriptionResponse> res = service.getUsersSubscriptionData(authUser.getId());
         //자바에서 Date 타입을 Json으로 내보낼 때는 unix stamp 타입으로 변경돼서 나가게 됨.
         for (int i = 0; i < res.size(); i++) {
+            //확인을 위한 구문
             Date date = res.get(i).getSubscriptionExpirationDate();
             System.out.println(date);
         }
         return ResponseEntity.ok(res);
     }
 
+    //구독 정보 기간 수정
     @Auth
     @PutMapping
     public ResponseEntity<SubscriptionResponse> editSubscription(
