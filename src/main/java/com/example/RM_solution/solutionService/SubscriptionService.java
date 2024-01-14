@@ -4,6 +4,7 @@ import com.example.RM_solution.companyService.Company;
 import com.example.RM_solution.companyService.CompanyMapper;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
+import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,9 @@ public class SubscriptionService {
     CompanyMapper companyMapper;
 
     //전체 조회
-    public List<SubscriptionResponse> getSubscriptionData(){
+    public List<AllSubscriptionsResponse> getSubscriptionData(){
         try{
-            List<SubscriptionResponse> allList = subscriptionMapper.findAll();
+            List<AllSubscriptionsResponse> allList = subscriptionMapper.findAll();
             if(allList.isEmpty()){
                 return List.of();
             }

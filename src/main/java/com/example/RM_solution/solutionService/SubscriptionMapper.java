@@ -1,6 +1,7 @@
 package com.example.RM_solution.solutionService;
 
 import com.example.RM_solution.companyService.Company;
+import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.apache.ibatis.annotations.*;
 
@@ -12,8 +13,12 @@ import java.util.Map;
 public interface SubscriptionMapper {
 
     //구독정보 조회
-    @Select("SELECT * FROM subscription")
-    List<SubscriptionResponse> findAll();
+    @Select("SELECT COUNT(DISTINCT user_id) AS userCount, subscription.id, " +
+            "subscription.subscription_cost, subscription.company_id, company.company_name, company.company_telephone, company.company_mail " +
+            "FROM subscription INNER JOIN company " +
+            "on subscription.company_id = company.id GROUP BY subscription.company_id, subscription.id " +
+            "ORDER BY subscription.id DESC ")
+    List<AllSubscriptionsResponse> findAll();
 
     //구독 정보 추가
     @Insert("INSERT INTO subscription " +
@@ -24,7 +29,7 @@ public interface SubscriptionMapper {
 
     //회사정보 + 구독정보 조회
     @Select("SELECT * FROM subscription " +
-            "inner join company on subscription.company_id = company.id " +
+            "INNER JOIN company on subscription.company_id = company.id " +
             "WHERE user_id = #{user_id}")
     List<SubscriptionResponse> findSubscriptionResponseByUser_id(long user_id);
 

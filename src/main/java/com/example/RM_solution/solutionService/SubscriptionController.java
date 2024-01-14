@@ -5,6 +5,7 @@ import com.example.RM_solution.auth.AuthUser;
 import com.example.RM_solution.auth.UserMapper;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
+import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class SubscriptionController {
 
     //전체 구독 정보 조회
     @GetMapping
-    public ResponseEntity<List<SubscriptionResponse>> getSubscription(){
-        List<SubscriptionResponse> result = service.getSubscriptionData();
+    public ResponseEntity<List<AllSubscriptionsResponse>> getSubscription(){
+        List<AllSubscriptionsResponse> result = service.getSubscriptionData();
         if(result != null){
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
