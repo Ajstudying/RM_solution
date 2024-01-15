@@ -32,6 +32,7 @@ public class JwtUtil {
                 .sign(algorithm);
     }
 
+    //토큰 검증
     public AuthUser validateToken(String token){
         System.out.println(token);
         //검증 객체

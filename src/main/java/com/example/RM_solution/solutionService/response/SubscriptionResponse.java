@@ -21,6 +21,8 @@ public class SubscriptionResponse {
     private Date subscriptionExpirationDate;
     //구독비용
     private int subscriptionCost;
+    //구독 서비스 이용 가능한지 여부
+    private boolean availableForSubscription;
     //회사 id
     private long companyId;
     //회사명

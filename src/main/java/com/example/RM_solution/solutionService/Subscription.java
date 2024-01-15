@@ -21,6 +21,8 @@ public class Subscription {
     private Date subscriptionExpirationDate;
     //구독비용
     private int subscriptionCost;
+    //구독 서비스 이용 가능한지 여부
+    private boolean availableForSubscription;
     //사용자 id
     private long user_id;
     //회사정보

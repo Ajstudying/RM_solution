@@ -18,4 +18,5 @@ public class SubscriptionRequest {
     private String storageCapacity;
     //구독기간
     private Integer subscriptionPeriod;
+
 }

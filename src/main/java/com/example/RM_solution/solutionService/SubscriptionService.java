@@ -7,6 +7,8 @@ import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class SubscriptionService {
 
     @Autowired
@@ -31,7 +34,7 @@ public class SubscriptionService {
     //전체 조회
     public List<AllSubscriptionsResponse> getSubscriptionData(){
         try{
-            List<AllSubscriptionsResponse> allList = subscriptionMapper.findAll();
+            List<AllSubscriptionsResponse> allList = subscriptionMapper.findAllSubscription();
             if(allList.isEmpty()){
                 return List.of();
             }
@@ -71,6 +74,11 @@ public class SubscriptionService {
             // LocalDate를 Date로 변환
             Date date = Date.from(newExpirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+            //이미 구독 정보가 있을 때 추가적으로 구독 정보 생성 안되게
+            Subscription isSubscription = subscriptionMapper.findByUserIdAndCompanyId(userId, companyId);
+            if(isSubscription != null){
+                return false;
+            }
 //            //회사 정보로 구독 정보가 있는지 확인
 //            Long isSubscription = subscriptionMapper.findByCompanyId(companyId);
 //
@@ -83,6 +91,7 @@ public class SubscriptionService {
                     .storageCapacity(req.getStorageCapacity())
                     .subscriptionExpirationDate(date)
                     .subscriptionCost(20000)
+                    .availableForSubscription(true)
                     .user_id(userId)
                     .company_id(companyId).build();
 
@@ -159,7 +168,7 @@ public class SubscriptionService {
             Date date = Date.from(newExpirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             //만료일 수정
-            subscriptionMapper.update(date, foundSubs.getId());
+            subscriptionMapper.update(date, true, foundSubs.getId());
 
             //수정된 결과 조회
             SubscriptionResponse updatedSubs = subscriptionMapper.findSubscriptionResponseById(foundSubs.getId());
@@ -174,6 +183,36 @@ public class SubscriptionService {
             result.put("error", e.getMessage());
         }
         return result;
+    }
+    //매일 자정 지나고 30초에 확인
+    @Scheduled(cron = "30 0 0 * * *")
+    public void checkSubscription (){
+        List<Subscription> allSubscription =
+                subscriptionMapper.findAvailableForSubscriptionsAndSubscriptionExpirationDate();
+        if(allSubscription.isEmpty()){
+            return;
+        }
+        for (int i = 0; i < allSubscription.size(); i++) {
+            // 현재 날짜
+            LocalDate currentDate = LocalDate.now();
+//            // LocalDate를 Date로 변환
+//            long currentDay = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime();
+//            System.out.println(currentDay);
+            //db에 저장 되어있는 날짜
+            Date storedDate = allSubscription.get(i).getSubscriptionExpirationDate();
+            // Date를 LocalDate로 변환
+            LocalDate storedLocalDate = storedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            // 만료일 계산
+            LocalDate expirationDate = storedLocalDate.plus(1, ChronoUnit.DAYS);
+
+            Subscription subs = allSubscription.get(i);
+            //구독 만료일 당일까지는 사용가능하게끔
+            //오늘 날짜와 저장된 만료일부터 하루 지난 날짜가 같으면 false/0으로 업데이트
+            if(currentDate.equals(expirationDate)){
+                System.out.println("만료됨");
+                subscriptionMapper.updateAvailableForSubscription(subs.getId());
+            }
+        }
     }
 
 }
