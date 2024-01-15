@@ -13,11 +13,13 @@ import java.util.Map;
 public interface SubscriptionMapper {
 
     //구독정보 조회
-    @Select("SELECT COUNT(DISTINCT user_id) AS userCount, subscription.id, " +
-            "subscription.subscription_cost, subscription.company_id, company.company_name, company.company_telephone, company.company_mail " +
-            "FROM subscription INNER JOIN company " +
-            "on subscription.company_id = company.id GROUP BY subscription.company_id, subscription.id " +
-            "ORDER BY subscription.id DESC ")
+    @Select("SELECT DISTINCT subscription.company_id, COUNT(subscription.user_id) AS userCount, " +
+            "company.company_name, subscription_cost, company.company_telephone, " +
+            "company.company_mail FROM subscription " +
+            "INNER JOIN company ON subscription.company_id = company.id " +
+            "GROUP BY subscription.company_id, company.company_name, subscription_cost, " +
+            "company.company_telephone, company.company_mail " +
+            "ORDER BY subscription.company_id DESC;")
     List<AllSubscriptionsResponse> findAll();
 
     //구독 정보 추가

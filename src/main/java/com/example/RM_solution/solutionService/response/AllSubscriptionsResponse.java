@@ -8,8 +8,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class AllSubscriptionsResponse {
-    //구독 id
-    private long id;
     //사용인원
     private long userCount;
     //구독비용
