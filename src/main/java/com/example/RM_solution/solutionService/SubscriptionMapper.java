@@ -39,6 +39,7 @@ public interface SubscriptionMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Subscription subscription);
 
+    //유저아이디와 회사아이디로 특정 구독 정보 찾기
     @Select("SELECT * FROM subscription where user_id = #{userId} and company_id = #{companyId}")
     Subscription findByUserIdAndCompanyId(@Param("userId") long userId, @Param("companyId") long companyId);
 

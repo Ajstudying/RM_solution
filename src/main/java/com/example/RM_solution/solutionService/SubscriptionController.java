@@ -7,7 +7,6 @@ import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
