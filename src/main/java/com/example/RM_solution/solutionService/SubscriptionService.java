@@ -112,7 +112,6 @@ public class SubscriptionService {
         try {
             //해당 유저의 구독 정보만 추출
             List<SubscriptionResponse> res = subscriptionMapper.findSubscriptionResponseByUser_id(user_id);
-            System.out.println(res);
 
             //구독 정보가 없을 때 빈 리스트 내보내기
             if(res.isEmpty()){
@@ -123,7 +122,6 @@ public class SubscriptionService {
                     .map(SubscriptionResponse::getCompanyId)
                     .collect(Collectors.toList());
 
-            System.out.println(companyIds + "id 들");
             // 한 번의 쿼리(동적 sql로 서버에서 db간의 통신을 최소화) 모든 구독 정보와 사용자 수를 가져오기
             List<Map<String, Long>> userCounts = subscriptionMapper.findUserCountsByCompanyIds(companyIds);
 

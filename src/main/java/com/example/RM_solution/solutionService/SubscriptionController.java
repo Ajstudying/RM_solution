@@ -3,6 +3,7 @@ package com.example.RM_solution.solutionService;
 import com.example.RM_solution.auth.Auth;
 import com.example.RM_solution.auth.AuthUser;
 import com.example.RM_solution.auth.UserMapper;
+import com.example.RM_solution.auth.UserRole;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
@@ -37,7 +38,7 @@ public class SubscriptionController {
     }
 
     //인증된 사용자의 구독 정보 추가
-    @Auth
+    @Auth(role = UserRole.USER)
     @PostMapping
     public ResponseEntity addSubscription
             (@RequestBody SubscriptionRequest subs, @RequestAttribute AuthUser authUser){
@@ -87,7 +88,7 @@ public class SubscriptionController {
     }
 
     // 인증된 사용자의 구독 정보를 조회
-    @Auth
+    @Auth(role = UserRole.USER)
     @GetMapping(value = "/{id}")
     public ResponseEntity<List<SubscriptionResponse>> getUsersSubscriptions(@RequestAttribute AuthUser authUser){
         List<SubscriptionResponse> res = service.getUsersSubscriptionData(authUser.getId());
@@ -101,7 +102,7 @@ public class SubscriptionController {
     }
 
     //구독 정보 기간 수정
-    @Auth
+    @Auth(role = UserRole.USER)
     @PutMapping
     public ResponseEntity<SubscriptionResponse> editSubscription(
             @RequestBody ModifySubscriptionRequest modifySubs,
