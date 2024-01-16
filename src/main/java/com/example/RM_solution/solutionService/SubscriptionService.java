@@ -123,8 +123,8 @@ public class SubscriptionService {
 
             System.out.println(userCounts);
 
-            // 구독 정보에 사용자 수 설정
             res.forEach(subscriptionResponse -> {
+                // 구독 정보에 사용자 수 설정
                 int index = res.indexOf(subscriptionResponse);
                 long companyId = userCounts.get(index).get("companyId");
 
@@ -132,6 +132,16 @@ public class SubscriptionService {
                     long userCount = userCounts.get(index).get("userCount");
                     subscriptionResponse.setUserCount(userCount);
                 }
+                //잔여기간 계산
+                LocalDate currentDate = LocalDate.now();
+                Date storedDate = subscriptionResponse.getSubscriptionExpirationDate();
+                // Date를 LocalDate로 변환
+                LocalDate storedLocalDate = storedDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+                // 날짜 간 차이 계산
+                long daysDifference = ChronoUnit.DAYS.between(currentDate, storedLocalDate);
+                //남은 날짜 객체 삽입
+                subscriptionResponse.setExtraSubscriptionDay(daysDifference);
+
             });
             StorageResponse storageResponse = storageService.getUserStorageData(user_id);
             Map<String, Object> response = new HashMap<>();

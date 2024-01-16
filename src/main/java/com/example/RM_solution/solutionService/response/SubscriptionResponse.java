@@ -3,7 +3,9 @@ package com.example.RM_solution.solutionService.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +19,8 @@ public class SubscriptionResponse {
     private String serviceType;
     //구독만료날짜
     private Date subscriptionExpirationDate;
+    //잔여기간
+    private long extraSubscriptionDay;
     //구독비용
     private int subscriptionCost;
     //구독 서비스 이용 가능한지 여부
