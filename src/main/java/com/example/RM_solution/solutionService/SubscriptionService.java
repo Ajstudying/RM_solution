@@ -60,7 +60,8 @@ public class SubscriptionService {
                         .companyName(req.getCompanyName())
                         .companyTelephone(req.getCompanyTelephone())
                         .companyMail(req.getCompanyMail())
-                        .companyAddress(req.getCompanyAddress()).build();
+                        .companyAddress(req.getCompanyAddress())
+                        .storageCapacity(1).build();
                 companyMapper.companyInsert(newCompany);
                 companyId = newCompany.getId();
             }
@@ -89,7 +90,6 @@ public class SubscriptionService {
             // 구독 정보 생성
             Subscription newSubscription = Subscription.builder()
                     .serviceType(req.getServiceType())
-                    .storageCapacity(req.getStorageCapacity())
                     .subscriptionExpirationDate(date)
                     .subscriptionCost(20000)
                     .availableForSubscription(true)

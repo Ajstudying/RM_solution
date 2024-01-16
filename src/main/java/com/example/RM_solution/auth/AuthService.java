@@ -20,7 +20,8 @@ public class AuthService {
             User toSaveUser = User.builder()
                     .username(req.getUsername())
                     .secret(hash.createHash(req.getPassword()))
-                    .role(req.getRole()).build();
+                    .role(req.getRole())
+                    .totalStorage(10).build();
             if(findUser(req.getUsername()) != null){
                 System.out.println("동일한 아이디 존재");
                 return false;

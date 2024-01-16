@@ -19,4 +19,6 @@ public class Company {
     private String companyMail;
     //주소
     private String companyAddress;
+    //서비스의 스토리지 사용량
+    private int storageCapacity;
 }

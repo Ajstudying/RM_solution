@@ -41,7 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 response.setStatus(401);
                 return false;
             }
-            //권한 체크
+            //권한 체크 (기업회원인지 일반회원인지 체크!)
             UserRole requiredRole = auth.value();
             if (!user.getRole().equals(requiredRole)) {
                 // 권한이 없는 경우

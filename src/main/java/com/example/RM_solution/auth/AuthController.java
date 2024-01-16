@@ -25,11 +25,14 @@ public class AuthController {
     @PostMapping(value = "signup")
     public ResponseEntity signUp(@RequestBody SignUpRequest req){
         System.out.println(req);
-
+        //데이터 무결성
         if(req.getUsername() == null || req.getUsername().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         if(req.getPassword() == null || req.getPassword().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        if(req.getRole() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         //유저 생성
