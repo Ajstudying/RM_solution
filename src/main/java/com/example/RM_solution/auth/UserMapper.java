@@ -17,9 +17,7 @@ public interface UserMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
 
-    //유저의 스토리지 용량 업데이트
-    @Update("UPDATE user SET total_storage = #{totalStorage} WHERE user.id = #{id}")
-    void update(@Param("totalStorage") int totalStorage, @Param("id") long id);
+
 
 
 }
