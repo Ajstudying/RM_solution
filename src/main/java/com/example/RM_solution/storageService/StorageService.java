@@ -19,9 +19,12 @@ public class StorageService {
             // 해당 유저의 스토리지 찾기
             Storage foundStorage = storageMapper.findByUserId(userId);
 
-            // 해당 회사의 스토리지 사용량
-            int usedStorage = companyMapper.findByCompanyId(companyId).getStorageCapacity();
-            int remainedStorage = foundStorage.getTotalStorage() - usedStorage;
+            // 해당 회사의 스토리지 빼고 남은 양
+            int companyStorage = companyMapper.findByCompanyId(companyId).getStorageCapacity();
+            int remainedStorage = foundStorage.getTotalStorage() - companyStorage;
+
+            //유저의 스토리지 총 사용량
+            int usedStorage = foundStorage.getUsedStorageCapacity() + companyStorage;
 
             // 스토리지 업데이트
             if (remainedStorage >= 0) {

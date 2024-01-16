@@ -135,9 +135,11 @@ public class SubscriptionService {
             });
             StorageResponse storageResponse = storageService.getUserStorageData(user_id);
             Map<String, Object> response = new HashMap<>();
+            //구독 데이터(여러개)
             response.put("subscriptionData", res);
+            //해당 유저의 스토리지 데이터(한개)
             response.put("storageData", storageResponse);
-            System.out.println(response);
+
             return response;
         } catch (Exception e) {
             e.printStackTrace();
