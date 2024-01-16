@@ -146,7 +146,7 @@ public class SubscriptionService {
         }
     }
 
-    //유저의 구독 정보 수정 업데이트
+    //유저의 구독 만료일 정보 수정 업데이트
     @Transactional
     public Map<String, Object> modifySubscriptionData
             (long user_id, ModifySubscriptionRequest modifySubs){

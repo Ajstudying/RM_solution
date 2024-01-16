@@ -105,11 +105,11 @@ public class SubscriptionController {
             @RequestAttribute AuthUser authUser){
 
         System.out.println(modifySubs);
-
+        //유저의 구독 만료일 정보 수정 업데이트
         Map<String, Object> result = service.modifySubscriptionData(authUser.getId(), modifySubs);
 
         //데이터가 null이 아니고 success가 true일때
-        if((boolean) result.get("success") && result != null){
+        if((boolean) result.get("success") && result.get("data") != null){
             SubscriptionResponse modifiedSubs = (SubscriptionResponse) result.get("data");
 
             return ResponseEntity.status(HttpStatus.OK).body(modifiedSubs);
