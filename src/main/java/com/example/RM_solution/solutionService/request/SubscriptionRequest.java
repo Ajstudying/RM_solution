@@ -12,6 +12,8 @@ public class SubscriptionRequest {
     private String companyTelephone;
     //이메일
     private String companyMail;
+    //회사 주소
+    private String companyAddress;
     //서비스 형태(Basic, Standard, Premium)
     private String serviceType;
     //스토리지 용량

@@ -59,7 +59,8 @@ public class SubscriptionService {
                 Company newCompany = Company.builder()
                         .companyName(req.getCompanyName())
                         .companyTelephone(req.getCompanyTelephone())
-                        .companyMail(req.getCompanyMail()).build();
+                        .companyMail(req.getCompanyMail())
+                        .companyAddress(req.getCompanyAddress()).build();
                 companyMapper.companyInsert(newCompany);
                 companyId = newCompany.getId();
             }

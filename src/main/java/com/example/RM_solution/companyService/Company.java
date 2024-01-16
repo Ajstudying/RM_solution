@@ -17,4 +17,6 @@ public class Company {
     private String companyTelephone;
     //이메일
     private String companyMail;
+    //주소
+    private String companyAddress;
 }

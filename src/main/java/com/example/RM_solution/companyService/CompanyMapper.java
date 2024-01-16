@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface CompanyMapper {
     //회사 정보 추가
-    @Insert("INSERT INTO company (company_name, company_telephone, company_mail) " +
-            "VALUES (#{companyName}, #{companyTelephone}, #{companyMail})")
+    @Insert("INSERT INTO company (company_name, company_telephone, company_mail, company_address) " +
+            "VALUES (#{companyName}, #{companyTelephone}, #{companyMail}, #{companyAddress})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     long companyInsert(Company company);
 

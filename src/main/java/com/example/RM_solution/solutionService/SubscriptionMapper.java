@@ -17,10 +17,10 @@ public interface SubscriptionMapper {
     //그래서 회사를 기준으로 조회함.
     @Select("SELECT DISTINCT subscription.company_id, COUNT(subscription.user_id) AS userCount, " +
             "company.company_name, subscription_cost, company.company_telephone, " +
-            "company.company_mail FROM subscription " +
+            "company.company_mail, company.company_address FROM subscription " +
             "INNER JOIN company ON subscription.company_id = company.id " +
             "GROUP BY subscription.company_id, company.company_name, subscription_cost, " +
-            "company.company_telephone, company.company_mail " +
+            "company.company_telephone, company.company_mail, company.company_address " +
             "ORDER BY subscription.company_id DESC;")
     List<AllSubscriptionsResponse> findAllSubscription();
 

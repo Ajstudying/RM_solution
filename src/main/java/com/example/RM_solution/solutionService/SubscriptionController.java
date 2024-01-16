@@ -43,6 +43,11 @@ public class SubscriptionController {
             (@RequestBody SubscriptionRequest subs, @RequestAttribute AuthUser authUser){
 
         System.out.println(subs);
+        //토큰이 유저정보가 맞지 않을때
+        if(userMapper.findByUserId(authUser.getId()) == null){
+            System.out.println("유저정보 오류");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         //데이터 무결성 확인
         if(subs.getServiceType() == null || subs.getServiceType().isEmpty()){
             System.out.println("구독 정보 오류");
@@ -68,12 +73,10 @@ public class SubscriptionController {
             System.out.println("회사 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        //토큰이 유저정보가 맞지 않을때
-        if(userMapper.findByUserId(authUser.getId()) == null){
-            System.out.println("유저정보 오류");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(subs.getCompanyAddress() == null || subs.getCompanyAddress().isEmpty()){
+            System.out.println("회사 정보 오류");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
         //구독 정보 생성
         boolean checkSubscriptionInsert = service.createSubscription(subs, authUser.getId());
         if(checkSubscriptionInsert){

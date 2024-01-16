@@ -20,4 +20,6 @@ public class AllSubscriptionsResponse {
     private String companyTelephone;
     //이메일
     private String companyMail;
+    //회사 주소
+    private String companyAddress;
 }
