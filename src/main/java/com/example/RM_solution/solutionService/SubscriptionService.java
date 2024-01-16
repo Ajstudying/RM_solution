@@ -3,6 +3,7 @@ import com.example.RM_solution.companyService.CompanyService;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
+import com.example.RM_solution.solutionService.response.StorageResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
 import com.example.RM_solution.storageService.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,14 +101,17 @@ public class SubscriptionService {
 
     //유저의 구독 정보 데이터 조회
     @Transactional
-    public List<SubscriptionResponse> getUsersSubscriptionData(long user_id) {
+    public Map<String, Object> getUsersSubscriptionData(long user_id) {
         try {
             //해당 유저의 구독 정보만 추출
             List<SubscriptionResponse> res = subscriptionMapper.findSubscriptionResponseByUser_id(user_id);
 
             //구독 정보가 없을 때 빈 리스트 내보내기
             if(res.isEmpty()){
-                return List.of();
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "no data");
+                response.put("data", List.of());
+                return response;
             }
             // 모든 구독 정보의 CompanyID를 추출
             List<Long> companyIds = res.stream()
@@ -129,12 +133,19 @@ public class SubscriptionService {
                     subscriptionResponse.setUserCount(userCount);
                 }
             });
-
-            return res;
+            StorageResponse storageResponse = storageService.getUserStorageData(user_id);
+            Map<String, Object> response = new HashMap<>();
+            response.put("subscriptionData", res);
+            response.put("storageData", storageResponse);
+            System.out.println(response);
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("An error occurred while processing the subscription data.", e);
         }
+    }
+    public StorageResponse getUserStorageData (long userId){
+        return storageService.getUserStorageData(userId);
     }
 
     //유저의 구독 만료일 정보 수정 업데이트

@@ -1,6 +1,7 @@
 package com.example.RM_solution.storageService;
 
 import com.example.RM_solution.companyService.CompanyMapper;
+import com.example.RM_solution.solutionService.response.StorageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,11 @@ public class StorageService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    //유저의 스토리지 사용 가능량/스토리지 사용한 양 조회
+    public StorageResponse getUserStorageData(long userId){
+        Storage foundStorage = storageMapper.findByUserId(userId);
+        return new StorageResponse(foundStorage.getTotalStorage(), foundStorage.getUsedStorageCapacity());
     }
 }

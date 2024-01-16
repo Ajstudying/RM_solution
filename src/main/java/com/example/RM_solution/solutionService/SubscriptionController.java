@@ -86,14 +86,14 @@ public class SubscriptionController {
     // 인증된 사용자의 구독 정보를 조회
     @Auth(UserRole.USER)
     @GetMapping(value = "/{id}")
-    public ResponseEntity<List<SubscriptionResponse>> getUsersSubscriptions(@RequestAttribute AuthUser authUser){
-        List<SubscriptionResponse> res = service.getUsersSubscriptionData(authUser.getId());
-        //자바에서 Date 타입을 Json으로 내보낼 때는 unix stamp 타입으로 변경돼서 나가게 됨.
-        for (int i = 0; i < res.size(); i++) {
-            //확인을 위한 구문
-            Date date = res.get(i).getSubscriptionExpirationDate();
-            System.out.println(date);
-        }
+    public ResponseEntity<Map<String, Object>> getUsersSubscriptions(@RequestAttribute AuthUser authUser){
+        Map<String, Object> res = service.getUsersSubscriptionData(authUser.getId());
+//        //자바에서 Date 타입을 Json으로 내보낼 때는 unix stamp 타입으로 변경돼서 나가게 됨.
+//        for (int i = 0; i < res.size(); i++) {
+//            //확인을 위한 구문
+//            Date date = res.get(i).getSubscriptionExpirationDate();
+//            System.out.println(date);
+//        }
         return ResponseEntity.ok(res);
     }
 
