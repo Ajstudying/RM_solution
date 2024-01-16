@@ -1,12 +1,11 @@
 package com.example.RM_solution.auth;
 
 import com.example.RM_solution.auth.entity.User;
+import com.example.RM_solution.auth.request.SignUpRequest;
 import com.example.RM_solution.auth.util.HashUtil;
 import com.example.RM_solution.auth.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.coyote.Response;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +32,9 @@ public class AuthController {
         if(req.getPassword() == null || req.getPassword().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
-        if(service.createIdentity(req)){
+        //유저 생성
+        boolean result = service.createIdentity(req);
+        if(result){
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -61,7 +61,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        String token = jwt.createToken(findedUser.getId(), findedUser.getUsername());
+        String token = jwt.createToken(findedUser.getId(),
+                findedUser.getUsername(), findedUser.getRole());
         System.out.println(token);
 
         Cookie cookie = new Cookie("token", token);

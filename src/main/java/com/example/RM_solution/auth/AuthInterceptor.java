@@ -35,9 +35,17 @@ public class AuthInterceptor implements HandlerInterceptor {
                 response.setStatus(401);
                 return false;
             }
+            //토큰 검증
             AuthUser user = jwt.validateToken(token.replace("Bearer ", ""));
             if(user == null){
                 response.setStatus(401);
+                return false;
+            }
+            //권한 체크
+            UserRole requiredRole = auth.value();
+            if (!user.getRole().equals(requiredRole)) {
+                // 권한이 없는 경우
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return false;
             }
 
