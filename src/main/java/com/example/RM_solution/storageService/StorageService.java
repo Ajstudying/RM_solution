@@ -25,6 +25,9 @@ public class StorageService {
             // 스토리지 업데이트
             if (remainedStorage >= 0) {
                 storageMapper.update(remainedStorage, usedStorage, userId);
+            }else{
+                // 예외 또는 로깅 등의 처리
+                throw new RuntimeException("Not enough storage capacity");
             }
         }catch (Exception e){
             e.printStackTrace();
