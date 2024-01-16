@@ -31,7 +31,11 @@ public class AuthService {
                 return false;
             }
             userMapper.insert(toSaveUser);
-            storageMapper.insert(new Storage(10,0,toSaveUser.getId()));
+            Storage toSaveStorage = Storage.builder()
+                    .totalStorage(10)
+                    .usedStorageCapacity(0)
+                    .user_id(toSaveUser.getId()).build();
+            storageMapper.insert(toSaveStorage);
 
         }catch (Exception e){
             e.printStackTrace();

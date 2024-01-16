@@ -32,9 +32,9 @@ public interface SubscriptionMapper {
 
     //구독 정보 추가
     @Insert("INSERT INTO subscription " +
-            "(service_type, storage_capacity, subscription_expiration_date, " +
+            "(service_type, subscription_expiration_date, " +
             "subscription_cost, available_for_subscription, user_id, company_id ) " +
-            "VALUES (#{serviceType}, #{storageCapacity}, #{subscriptionExpirationDate}, " +
+            "VALUES (#{serviceType}, #{subscriptionExpirationDate}, " +
             "#{subscriptionCost}, #{availableForSubscription}, #{user_id}, #{company_id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Subscription subscription);

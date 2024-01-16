@@ -54,10 +54,6 @@ public class SubscriptionController {
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        if(subs.getStorageCapacity() == null || subs.getStorageCapacity().isEmpty()){
-            System.out.println("구독 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
         if(subs.getSubscriptionPeriod() == null){
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

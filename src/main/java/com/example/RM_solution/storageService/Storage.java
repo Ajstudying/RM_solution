@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Storage {
+
+    private long id;
     //회원 가입 시에 초기화해서 생성되도록 설정.
     // 스토리지 용량 //어카운트의 잔액 느낌 초기값 10으로 설정
     private int totalStorage;

@@ -12,8 +12,8 @@ public interface UserMapper {
     User findByUsername(String username);
     @Select("SELECT * FROM user WHERE id = #{id}")
     User findByUserId(long id);
-    @Insert("INSERT INTO user (username, secret, role, total_storage) " +
-            "VALUES (#{username}, #{secret}, #{role}, #{totalStorage})")
+    @Insert("INSERT INTO user (username, secret, role) " +
+            "VALUES (#{username}, #{secret}, #{role})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
 

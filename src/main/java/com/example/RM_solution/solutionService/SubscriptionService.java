@@ -1,11 +1,10 @@
 package com.example.RM_solution.solutionService;
-
-import com.example.RM_solution.companyService.Company;
-import com.example.RM_solution.companyService.CompanyMapper;
+import com.example.RM_solution.companyService.CompanyService;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
 import com.example.RM_solution.solutionService.response.AllSubscriptionsResponse;
 import com.example.RM_solution.solutionService.response.SubscriptionResponse;
+import com.example.RM_solution.storageService.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,7 +28,10 @@ public class SubscriptionService {
     SubscriptionMapper subscriptionMapper;
 
     @Autowired
-    CompanyMapper companyMapper;
+    CompanyService companyService;
+
+    @Autowired
+    StorageService storageService;
 
     //전체 조회
     public List<AllSubscriptionsResponse> getSubscriptionData(){
@@ -50,21 +52,9 @@ public class SubscriptionService {
     public boolean createSubscription(SubscriptionRequest req, long userId){
 
         try{
-            // 회사 정보 조회
-            Long companyId = companyMapper.findByCompanyName(req.getCompanyName());
-
-            // 회사 정보가 없을 때 새로 만들기
-            if (companyId == null) {
-                // 회사정보 저장
-                Company newCompany = Company.builder()
-                        .companyName(req.getCompanyName())
-                        .companyTelephone(req.getCompanyTelephone())
-                        .companyMail(req.getCompanyMail())
-                        .companyAddress(req.getCompanyAddress())
-                        .storageCapacity(1).build();
-                companyMapper.companyInsert(newCompany);
-                companyId = newCompany.getId();
-            }
+            // 회사 정보 조회 또는 생성
+            Long companyId = companyService.getOrCreateCompany(
+                    req.getCompanyName(), req.getCompanyTelephone(), req.getCompanyMail(), req.getCompanyAddress());
 
             //구독 만료일 설정
             int subscriptionPeriodInDays = req.getSubscriptionPeriod();
@@ -95,6 +85,8 @@ public class SubscriptionService {
                     .availableForSubscription(true)
                     .user_id(userId)
                     .company_id(companyId).build();
+            //해당 유저의 스토리지 찾아서 업데이트 처리
+            storageService.updateStorage(userId, companyId);
 
             // 구독 정보 저장
             subscriptionMapper.insert(newSubscription);
