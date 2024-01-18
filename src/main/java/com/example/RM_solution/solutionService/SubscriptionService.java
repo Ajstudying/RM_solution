@@ -1,4 +1,5 @@
 package com.example.RM_solution.solutionService;
+import com.example.RM_solution.auth.UserRole;
 import com.example.RM_solution.companyService.CompanyService;
 import com.example.RM_solution.solutionService.request.ModifySubscriptionRequest;
 import com.example.RM_solution.solutionService.request.SubscriptionRequest;
@@ -50,7 +51,7 @@ public class SubscriptionService {
 
     //구독 정보 생성
     @Transactional
-    public boolean createSubscription(SubscriptionRequest req, long userId){
+    public boolean createSubscription(SubscriptionRequest req, long userId, UserRole role){
 
         try{
             // 회사 정보 조회 또는 생성
@@ -78,11 +79,16 @@ public class SubscriptionService {
 //            if(isSubscription != null){
 //                return false;
 //            }
+            int cost = 20000;
+            if(role == UserRole.PREMIUM_MEMBER){
+                cost = 10000;
+            }
+
             // 구독 정보 생성
             Subscription newSubscription = Subscription.builder()
                     .serviceType(req.getServiceType())
                     .subscriptionExpirationDate(date)
-                    .subscriptionCost(20000)
+                    .subscriptionCost(cost)
                     .availableForSubscription(true)
                     .user_id(userId)
                     .company_id(companyId).build();
@@ -156,6 +162,7 @@ public class SubscriptionService {
             throw new RuntimeException("An error occurred while processing the subscription data.", e);
         }
     }
+
     public StorageResponse getUserStorageData (long userId){
         return storageService.getUserStorageData(userId);
     }

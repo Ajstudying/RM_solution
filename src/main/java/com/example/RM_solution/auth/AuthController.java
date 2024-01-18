@@ -24,7 +24,7 @@ public class AuthController {
 
     @PostMapping(value = "signup")
     public ResponseEntity signUp(@RequestBody SignUpRequest req){
-        System.out.println(req);
+        System.out.println(req.getUsername());
         //데이터 무결성
         if(req.getUsername() == null || req.getUsername().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -44,6 +44,29 @@ public class AuthController {
         }
 
     }
+//    @PostMapping(value = "signup/company")
+//    public ResponseEntity CompanySignUp(@RequestBody CompanySignUpRequest companyReq){
+//        System.out.println(companyReq);
+//        //데이터 무결성
+//        if(companyReq.getUsername() == null || companyReq.getUsername().isEmpty()){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        if(companyReq.getPassword() == null || companyReq.getPassword().isEmpty()){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        if(companyReq.getRole() == null){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        //유저 생성
+//        boolean result = service.createIdentity(req);
+//
+//        if(result){
+//            return ResponseEntity.status(HttpStatus.CREATED).build();
+//        }else {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        }
+//
+//    }
 
     @PostMapping(value = "signin")
     public ResponseEntity signin(
