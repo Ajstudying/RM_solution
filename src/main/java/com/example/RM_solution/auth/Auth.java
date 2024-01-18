@@ -13,7 +13,7 @@ public @interface Auth {
 //    UserRole user() default UserRole.USER;
 //    UserRole company() default UserRole.COMPANY_MEMBER;
 
-    UserRole value() default UserRole.USER;
+    UserRole[] value();
 
 }
 

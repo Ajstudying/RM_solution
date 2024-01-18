@@ -38,7 +38,7 @@ public class SubscriptionController {
     }
 
     //인증된 사용자의 구독 정보 추가
-    @Auth(UserRole.USER)
+    @Auth({UserRole.USER, UserRole.PREMIUM_MEMBER})
     @PostMapping
     public ResponseEntity addSubscription
             (@RequestBody SubscriptionRequest subs, @RequestAttribute AuthUser authUser){
@@ -84,7 +84,7 @@ public class SubscriptionController {
     }
 
     // 인증된 사용자의 구독 정보를 조회
-    @Auth(UserRole.USER)
+    @Auth({UserRole.USER, UserRole.PREMIUM_MEMBER})
     @GetMapping(value = "/user")
     public ResponseEntity<Map<String, Object>> getUsersSubscriptions(@RequestAttribute AuthUser authUser){
         Map<String, Object> res = service.getUsersSubscriptionData(authUser.getId());
@@ -96,55 +96,10 @@ public class SubscriptionController {
 //        }
         return ResponseEntity.ok(res);
     }
-    //없어도 되지만 확인을 위해 남겨둠
-    //프리미엄 사용자의 구독 정보 추가(금액 할인)
-    @Auth(UserRole.PREMIUM_MEMBER)
-    @PostMapping(value = "/{id}")
-    public ResponseEntity addPremiumSubscription
-    (@RequestBody SubscriptionRequest subs, @RequestAttribute AuthUser authUser){
 
-        System.out.println("프리미엄" + subs);
-        //토큰이 유저정보가 맞지 않을때
-        if(userMapper.findByUserId(authUser.getId()) == null){
-            System.out.println("유저정보 오류");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        //데이터 무결성 확인
-        if(subs.getServiceType() == null || subs.getServiceType().isEmpty()){
-            System.out.println("구독 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if(subs.getSubscriptionPeriod() == null){
-            System.out.println("구독 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if(subs.getCompanyName() == null || subs.getCompanyName().isEmpty()){
-            System.out.println("회사 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if(subs.getCompanyTelephone() == null || subs.getCompanyTelephone().isEmpty()){
-            System.out.println("회사 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if(subs.getCompanyMail() == null || subs.getCompanyMail().isEmpty()){
-            System.out.println("회사 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if(subs.getCompanyAddress() == null || subs.getCompanyAddress().isEmpty()){
-            System.out.println("회사 정보 오류");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        //구독 정보 생성
-        boolean checkSubscriptionInsert = service.createSubscription(subs, authUser.getId(), authUser.getRole());
-        if(checkSubscriptionInsert){
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
 
     //구독 정보 기간 수정
-    @Auth(UserRole.USER)
+    @Auth({UserRole.USER, UserRole.PREMIUM_MEMBER})
     @PutMapping
     public ResponseEntity<SubscriptionResponse> editSubscription(
             @RequestBody ModifySubscriptionRequest modifySubs,

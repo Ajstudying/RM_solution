@@ -9,6 +9,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
@@ -42,8 +43,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
             }
             //권한 체크 (기업회원인지 일반회원인지 체크!)
-            UserRole requiredRole = auth.value();
-            if (!user.getRole().equals(requiredRole)) {
+            UserRole[] requiredRoles = auth.value();
+            UserRole userRole = user.getRole();
+
+            if (!Arrays.asList(requiredRoles).contains(userRole)) {
                 // 권한이 없는 경우
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return false;

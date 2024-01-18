@@ -34,7 +34,7 @@ public class AuthService {
             }
             userMapper.insert(toSaveUser);
             Storage toSaveStorage = Storage.builder()
-                    .totalStorage(10)
+                    .availableStorageCapacity(10)
                     .usedStorageCapacity(0)
                     .user_id(toSaveUser.getId()).build();
             storageMapper.insert(toSaveStorage);

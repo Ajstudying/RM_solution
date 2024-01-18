@@ -17,11 +17,11 @@ public class StorageService {
     public void updateStorage(long userId, long companyId) {
         try{
             // 해당 유저의 스토리지 찾기
-            Storage foundStorage = storageMapper.findByUserId(userId);
+            StorageResponse foundStorage = storageMapper.findByUserId(userId);
 
             // 해당 회사의 스토리지 빼고 남은 양
             int companyStorage = companyMapper.findByCompanyId(companyId).getStorageCapacity();
-            int remainedStorage = foundStorage.getTotalStorage() - companyStorage;
+            int remainedStorage = foundStorage.getAvailableStorageCapacity() - companyStorage;
 
             //유저의 스토리지 총 사용량
             int usedStorage = foundStorage.getUsedStorageCapacity() + companyStorage;
@@ -40,7 +40,7 @@ public class StorageService {
 
     //유저의 스토리지 사용 가능량/스토리지 사용한 양 조회
     public StorageResponse getUserStorageData(long userId){
-        Storage foundStorage = storageMapper.findByUserId(userId);
-        return new StorageResponse(foundStorage.getTotalStorage(), foundStorage.getUsedStorageCapacity());
+        return storageMapper.findByUserId(userId);
+
     }
 }
