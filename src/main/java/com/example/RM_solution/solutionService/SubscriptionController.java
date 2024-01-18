@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,10 @@ public class SubscriptionController {
         }
         //데이터 무결성 확인
         if(subs.getServiceType() == null || subs.getServiceType().isEmpty()){
+            System.out.println("구독 정보 오류");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        if(!Arrays.asList("Basic", "Standard", "Premium").contains(subs.getServiceType())){
             System.out.println("구독 정보 오류");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
